@@ -6,7 +6,7 @@ Copyright (c) 2022-2025 [Antmicro](https://www.antmicro.com)
 
 This tool is an open source utility for aiding Blender scene setup and running render jobs for Blender models in various image and video output formats. 
 The tool is designed to visualize PCB-related models in .blend format. 
-Currently `pcbooth` supports Blender 4.1+.
+Currently `pcbooth` supports Blender 4.5+.
 
 ## Installation
 
@@ -16,7 +16,7 @@ Currently `pcbooth` supports Blender 4.1+.
 
 * python3.11, pip, pipx, ffmpeg
 
-Additionally to preview and modify the generated .blend file, [Blender 4.x](https://www.blender.org/download/releases/) needs to be installed.
+Additionally to preview and modify the generated .blend file, [Blender 4.5 LTS](https://www.blender.org/download/lts/4-5/) needs to be installed.
 
 ### Installation (Debian)
 

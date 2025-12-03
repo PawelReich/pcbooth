@@ -38,4 +38,4 @@ For developers, it is recommended to clone the repository and install PCBooth in
 ```
 
 This installs the required dependencies and installs `PCBooth` into its own virtual environment.
-`PCBooth` depends on the `bpy` package in version `4.1` to interact with Blender, which is currently only compatible with Python 3.11.
+`PCBooth` depends on the `bpy` package in version `4.5.4` to interact with Blender, which is currently only compatible with Python 3.11.
