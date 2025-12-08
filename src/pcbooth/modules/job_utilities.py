@@ -21,11 +21,16 @@ def holdout_override(
     components: List[bpy.types.Object] | Set[bpy.types.Object],
     full: bool = False,
 ) -> Generator[None, Any, None]:
-    """Apply holdout override for components from provided list. If non_obstructed"""
+    """Apply holdout override for components from provided list.
+
+    Components have their `holdout_render` and `is_rendered` settings set depending on passed `full` boolean.
+    * if full == True - use non-obstructed mode, components will be rendered as full silhouettes.
+    * if full == False - use obstructed mode, component will be rendered with parts of them covered by another objects.
+    """
     try:
         if full:
             for component in bpy.data.objects:
-                if component.library:
+                if component.library or is_background(component):
                     continue
                 component.hide_render = True
         for component in components:
@@ -35,10 +40,11 @@ def holdout_override(
     except AttributeError:
         pass
     finally:
-        for component in bpy.data.objects:
-            if component.library:
-                continue
-            component.hide_render = False
+        if full:
+            for component in bpy.data.objects:
+                if component.library or is_background(component):
+                    continue
+                component.hide_render = False
         for component in components:
             if component.library:
                 continue
@@ -207,3 +213,8 @@ def user_animation_override(studio: Studio) -> Generator[None, Any, None]:
 
     finally:
         studio.clear_animation_data()
+
+
+def is_background(obj: bpy.types.Object) -> bool:
+    """Check if component is Studio background."""
+    return obj.users_collection[0] == Background.collection

@@ -96,7 +96,7 @@ class Highlights(pcbooth.core.job.Job):
         """
 
         rendered = set(dict.fromkeys(self.studio.top_components + self.studio.bottom_components))
-        linked = {object for object in cu.get_linked() if not is_background(object)}
+        linked = {object for object in cu.get_linked() if not ju.is_background(object)}
         hidden = {component for component in rendered if self.is_hidden(component, self.studio.is_pcb)} | linked
         highlighted = {
             component for component in rendered if self.is_highlighted(component, self.studio.is_pcb)
@@ -144,13 +144,6 @@ class Highlights(pcbooth.core.job.Job):
         if hidden := self.params.get("HIDDEN"):
             return any(designator.startswith(des) for des in hidden)
         return False
-
-
-def is_background(object: bpy.types.Object) -> bool:
-    """
-    Check if component is Studio background.
-    """
-    return object.users_collection[0] == Background.collection
 
 
 def add_material(name: str, rgb: str) -> bpy.types.Material:
