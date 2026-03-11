@@ -83,7 +83,7 @@ class Highlights(pcbooth.core.job.Job):
         self.studio.change_position(side)
         Background.update_position(target)
         camera.change_position(side)
-        renderer.render(camera.object, filename)
+        renderer.render(camera, filename)
         renderer.clear_cache()
         self.update_status()
 

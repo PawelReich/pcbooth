@@ -46,7 +46,7 @@ class Static(UserAnimationJob):
                         bpy.context.scene.frame_set(frame)
                         filename = f"{camera.name.lower()}{position[0]}_{background.name}{self.get_frame_suffix(frame)}"
 
-                        renderer.render(camera.object, filename)
-                        renderer.thumbnail(camera.object, filename)
+                        renderer.render(camera, filename, add_metadata=True)
+                        renderer.thumbnail(camera, filename)
                         renderer.clear_cache()
                         self.update_status()

@@ -4,10 +4,11 @@ import bpy
 import logging
 from pathlib import Path
 
-from pcbooth.modules.file_io import stdout_redirected, execute_cmd
+from pcbooth.modules.camera import Camera
+from pcbooth.modules.custom_utilities import add_xmp_metadata
+from pcbooth.modules.file_io import stdout_redirected, execute_cmd, remove_file, mkdir
 import pcbooth.modules.config as config
 from typing import Dict, List, Callable, Any, cast, Optional
-from pcbooth.modules.file_io import remove_file, mkdir
 
 from re import match
 from os import listdir
@@ -209,10 +210,11 @@ class RendererWrapper:
         except TypeError:
             bpy.context.scene.render.image_settings.color_mode = "RGB"
 
-    def _init_render(self, camera: bpy.types.Object) -> None:
+    def _init_render(self, camera: bpy.types.Object, add_metadata: bool = False) -> None:
         """
-        Render initial image and save in  renders directory to be used as cache.
+        Render initial image and save in renders directory to be used as cache.
         Uses CACHE_FORMAT and CACHE_NAME variables to determine file name and extension.
+        Saves camera data in a metadata object.
         """
         scene = bpy.context.scene
         scene.camera = camera
@@ -231,27 +233,31 @@ class RendererWrapper:
             logger.error(f"Can't load cache from {self.cache_path}")
 
     @staticmethod
-    def _save_render(image: bpy.types.Image, filepath: str) -> None:
+    def _save_render(image: bpy.types.Image, filepath: str, metadata: None | dict[str, str] = None) -> None:
         try:
             image.save(filepath=filepath)
             logger.info(f"Saved render as: {bpy.path.relpath(filepath)}")
+            if metadata:
+                add_xmp_metadata(filepath, metadata)
         except (RuntimeError, AttributeError):
             logger.error(f"Save failed for {bpy.path.relpath(filepath)}")
 
     def render(
         self,
-        camera: bpy.types.Object,
+        camera: Camera,
         file_name: str,
         format_override: Optional[str] = None,
+        add_metadata: bool = False,
     ) -> None:
         """
         Render an image using specified camera and save under provided file name.
         Optional format_override can be used to ignore format list from config file.
         Uses cached render from _init_render method.
+        Saves camera metadata inside image file using XMP format.
         """
         if not self.cache:
             logger.info(f"Rendering {file_name}...")
-            self._init_render(camera)
+            self._init_render(camera.object)
             if not self.cache:
                 return
 
@@ -262,11 +268,11 @@ class RendererWrapper:
         for format in formats:
             self._set_image_format(format)
             abs_path = scene.render.filepath + self.img_ext
-            self._save_render(self.cache, abs_path)
+            self._save_render(self.cache, abs_path, camera.get_metadata() if add_metadata else {})
 
     def thumbnail(
         self,
-        camera: bpy.types.Object,
+        camera: Camera,
         file_name: str,
         format_override: Optional[str] = None,
     ) -> None:
@@ -278,7 +284,7 @@ class RendererWrapper:
             return
         if not self.cache:
             logger.info(f"Rendering {file_name}...")
-            self._init_render(camera)
+            self._init_render(camera.object)
             if not self.cache:
                 return
 
@@ -295,7 +301,7 @@ class RendererWrapper:
             self._save_render(new_render, abs_path)
             bpy.data.images.remove(new_render)
 
-    def render_animation(self, camera: bpy.types.Object, file_name: str) -> None:
+    def render_animation(self, camera: Camera, file_name: str) -> None:
         """
         Render sequence of images iterating over frame count range from bpy.context.scene.
         Clears cache after each frame as they are not supposed to be rendered as mutliple format.

@@ -8,8 +8,12 @@ from typing import List, Optional, Any, Dict, cast
 import re
 from pcbooth.modules.bounding_box import Bounds
 from treelib import Tree  # type: ignore
+from libxmp import XMPMeta, XMPFiles, XMPError  # type: ignore
 
 logger = logging.getLogger(__name__)
+XMP_CUSTOM_NS = "https://openhardware.antmicro.com/"
+XMP_CUSTOM_PREFIX = "cam_data"
+XMPMeta.register_namespace(XMP_CUSTOM_NS, XMP_CUSTOM_PREFIX)
 
 
 def save_pcb_blend(path: str, apply_transforms: bool = False) -> None:
@@ -281,3 +285,18 @@ def set_frame_range(frame_start: int, frame_end: int) -> None:
     scene.frame_set(frame_start)
 
     logger.debug(f"Set frames: start={frame_start}, end={frame_end}, current={frame_start}")
+
+
+def add_xmp_metadata(filepath: str, metadata: dict[str, str]) -> None:
+    """Add XMP metadata to image file."""
+    try:
+        xmpfile = XMPFiles(file_path=filepath, open_forupdate=True)
+        xmp = xmpfile.get_xmp() or XMPMeta()
+        for key, val in metadata.items():
+            xmp.set_property(XMP_CUSTOM_NS, key, val)
+        xmpfile.put_xmp(xmp)
+        xmpfile.close_file()
+    except XMPError:
+        logger.warning("Image format does not support metadata. Metadata won't be saved.")
+    except Exception as e:
+        logger.warning("Error during XMP metadata append: ", e)

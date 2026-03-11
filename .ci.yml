@@ -8,7 +8,7 @@ include:
     mkdir -p logs
     apt-get -qqy update >> logs/debian_install.log
     apt-get -qqy update --fix-missing >> logs/debian_install.log
-    apt update && apt-get -qqy install git pip python3.11 python3-poetry python3.11-venv pipx libsm6 ffmpeg >> logs/debian_install.log
+    apt update && apt-get -qqy install git pip python3.11 python3-poetry python3.11-venv pipx libsm6 ffmpeg libexempi-dev >> logs/debian_install.log
     python3.11 -m pipx install .
 
 .get_config: &get_config |-

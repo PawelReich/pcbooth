@@ -45,7 +45,7 @@ When called without an argument, it will increment the progress count iterator a
 
 ```python
     for camera in self.studio.cameras:
-      renderer.render(camera.object, file_name="render")
+      renderer.render(camera, file_name="render")
       renderer.clear_cache()
       self.update_status()
 ```

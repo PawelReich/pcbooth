@@ -76,8 +76,8 @@ class Stackup(pcbooth.core.job.Job):
                 for idx, layer in enumerate(layers):
                     layer.hide_render = False
                     filename = f"layer{abs(idx-len(layers))}"
-                    renderer.render(camera.object, filename)
-                    renderer.thumbnail(camera.object, filename)
+                    renderer.render(camera, filename)
+                    renderer.thumbnail(camera, filename)
                     renderer.clear_cache()
                     self.update_status()
 

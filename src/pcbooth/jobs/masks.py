@@ -110,7 +110,7 @@ class Masks(UserAnimationJob):
         """Rendering functions called regardless of position."""
         with ju.holdout_override([component], full=state == "full"):
             filename = self.get_name(component, side, camera, state)
-            renderer.render(camera.object, filename)
+            renderer.render(camera, filename)
             renderer.clear_cache()
             self.update_status()
 

@@ -14,7 +14,7 @@ Currently `pcbooth` supports Blender 4.5+.
 
 `pcbooth` depends on the following packages:
 
-* python3.11, pip, pipx, ffmpeg
+* python3.11, pip, pipx, ffmpeg, libexempi-dev
 
 Additionally to preview and modify the generated .blend file, [Blender 4.5 LTS](https://www.blender.org/download/lts/4-5/) needs to be installed.
 
@@ -24,7 +24,7 @@ Additionally to preview and modify the generated .blend file, [Blender 4.5 LTS](
 
     ```bash
     sudo apt-get update
-    sudo apt install python3.11 python3.11-venv pip ffmpeg
+    sudo apt install python3.11 python3.11-venv pip ffmpeg libexempi-dev
     python3 -m pip install --user pipx
     python3 -m pipx ensurepath
     ```

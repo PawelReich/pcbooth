@@ -48,7 +48,7 @@ class FlipTransition(pcbooth.core.job.Job):
                 filename = f"{camera.name.lower()}{pos_start[0]}_{camera.name.lower()}{pos_end[0]}"
                 rev_filename = f"{camera.name.lower()}{pos_end[0]}_{camera.name.lower()}{pos_start[0]}"
                 self.create_camera_keyframes(camera, pair)
-                renderer.render_animation(camera.object, filename)
+                renderer.render_animation(camera, filename)
                 ffmpeg.run(filename, filename)
                 ffmpeg.reverse(filename, rev_filename)
                 ffmpeg.thumbnail(filename)

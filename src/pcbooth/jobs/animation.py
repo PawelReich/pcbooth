@@ -41,7 +41,7 @@ class Animation(UserAnimationJob):
 
                     filename = f"{camera.name.lower()}{position[0]}_{background.name}_animation"
                     rev_filename = f"{camera.name.lower()}{position[0]}_{background.name}_animation_reversed"
-                    renderer.render_animation(camera.object, filename)
+                    renderer.render_animation(camera, filename)
 
                     ffmpeg.run(filename, filename)
                     ffmpeg.reverse(filename, rev_filename)

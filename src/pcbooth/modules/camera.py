@@ -4,7 +4,7 @@ import bpy
 import pcbooth.modules.custom_utilities as cu
 from pcbooth.modules.bounding_box import Bounds
 import pcbooth.modules.config as config
-from math import radians
+from math import radians, degrees
 from mathutils import Matrix
 from typing import Generator, Tuple, Dict, List, ClassVar, Any, Optional
 import logging
@@ -239,6 +239,22 @@ class Camera:
             scene.frame_current,
             focus=config.blendcfg["SCENE"]["ORTHO_CAM"] or focus,
         )
+
+    def get_metadata(self) -> dict[str, str]:
+        """Return camera data into dictionary object."""
+        return {
+            "name": self.name,
+            "loc": str(
+                [round(self.object.location.x, 2), round(self.object.location.y, 2), round(self.object.location.z, 2)]
+            ),
+            "rot_deg": str(
+                [
+                    round(degrees(self.object.rotation_euler.x), 2),
+                    round(degrees(self.object.rotation_euler.y), 2),
+                    round(degrees(self.object.rotation_euler.z), 2),
+                ]
+            ),
+        }
 
     @contextmanager
     def dof_override(self) -> Generator[None, Any, None]:

@@ -60,7 +60,7 @@ class CameraTransition(pcbooth.core.job.Job):
                 filename = f"{camera_start.name.lower()}{position[0]}_{camera_end.name.lower()}{position[0]}"
                 rev_filename = f"{camera_end.name.lower()}{position[0]}_{camera_start.name.lower()}{position[0]}"
                 self.create_keyframes(camera_start, camera_end, position)
-                renderer.render_animation(camera_start.object, filename)
+                renderer.render_animation(camera_start, filename)
                 ffmpeg.run(filename, filename)
                 ffmpeg.reverse(filename, rev_filename)
                 ffmpeg.thumbnail(filename)
