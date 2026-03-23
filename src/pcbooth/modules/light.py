@@ -94,7 +94,7 @@ def disable_emission_nodes() -> None:
             if node.type == "EMISSION":
                 node.mute = True
             if node.type == "BSDF_PRINCIPLED":
-                node.inputs[27].default_value = 0  # type: ignore
+                node.inputs[28].default_value = 0  # type: ignore
 
 
 class Light:
