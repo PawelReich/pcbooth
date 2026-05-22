@@ -244,10 +244,10 @@ class Camera:
         """Return camera data into dictionary object."""
         return {
             "name": self.name,
-            "loc": str(
+            "location": str(
                 [round(self.object.location.x, 2), round(self.object.location.y, 2), round(self.object.location.z, 2)]
             ),
-            "rot_deg": str(
+            "rotationDegrees": str(
                 [
                     round(degrees(self.object.rotation_euler.x), 2),
                     round(degrees(self.object.rotation_euler.y), 2),
